@@ -1,0 +1,54 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+
+using namespace std;
+
+struct node
+{
+	double x,y;
+}p1,p2,p3,p4,ans;
+
+int main()
+{
+	int test;
+	double x1,x2,x3,x4,y1,y2,y3,y4;
+	scanf("%d",&test);
+	printf("INTERSECTING LINES OUTPUT\n");
+	while(test--){
+		scanf("%lf %lf %lf %lf %lf %lf %lf %lf",
+			&x1,&y1, &x2,&y2, &x3,&y3, &x4,&y4);
+		int a=(x4-x3)*(y2-y1)-(y4-y3)*(x2-x1);
+		if(a!=0){
+			double b=( (x1-x3)*(y2-y1)-(y1-y3)*(x2-x1) )/a;
+			ans.x=(x4-x3)*b+x3;
+			ans.y=(y4-y3)*b+y3;
+		/*	if(min(x1,x2)<=ans.x && max(x1,x2)>=ans.x &&
+				min(x3,x4)<=ans.x && max(x3,x4)>=ans.x &&
+				min(y1,y2)<=ans.y && max(y1,y2)>=ans.y &&
+				min(y3,y4)<=ans.y && max(y3,y4)>=ans.y)
+			*/	printf("POINT %.2lf %.2lf\n",ans.x, ans.y);
+			//else	printf("NONE\n");
+		}
+		else{
+			bool check=0;
+			if(x4-x3 !=0){
+				double b=(x1-x3)/(x4-x3);
+				if(abs(b*(y4-y3)+y3 -y1) > 2e-5)
+					printf("NONE\n"),check=1;
+			}
+			else if(x3 != x1)	printf("NONE\n"),check=1;
+			else if(x4-x3 !=0){
+				double b=(x2-x3)/(x4-x3);
+				if(abs(b*(y4-y3)+y3-y2)>2e-5)
+					printf("NONE\n"),check=1;
+			}
+			else if(x3 != x2)	printf("NONE\n"),check=1;
+			
+			if(!check) printf("LINE\n");
+		}
+	}
+	printf("END OF OUTPUT\n");
+	return 0;
+}

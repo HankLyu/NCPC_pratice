@@ -1,0 +1,15 @@
+void backtrack(int n) // n is the dimension
+{
+	// it's a solution
+	if (n == 3){
+		print_solution();
+		return;
+	}
+	// take n and set constraint
+	solution[n] = true;
+	backtrack(n+1);
+	// back up the constraint and take nothing
+	solution[n] = false;
+	backtrack(n+1);
+}
+

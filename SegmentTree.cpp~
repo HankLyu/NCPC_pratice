@@ -1,0 +1,76 @@
+struct node{
+	int beg,end, cmax,cmin;
+}tree[3*maxx];
+int num[maxx];
+struct node2{// record ans
+	int cmax,cmin;
+};
+void create(int id,int beg,int end){
+	tree[id].beg=beg,tree[id].end=end;
+	if(beg==end){
+		tree[id].cmax=num[beg];
+		tree[id].cmin=num[end];
+		return ;
+	}
+	int mid=(beg+end)/2;
+	create(2*id,beg,mid);
+	create(2*id+1,mid+1,end);
+	tree[id].cmax=max(tree[2*id].cmax, tree[2*id+1].cmax);
+	tree[id].cmin=min(tree[2*id].cmin, tree[2*id+1].cmin);
+}
+node2 findans(int id,int beg,int end,int ita,int itb){
+	node2 tmp;
+	tmp.cmax=0,tmp.cmin=2e9;
+	if(ita>end || itb<beg)	return tmp;	//is total out
+	if(ita<=beg && end<=itb){			//is total in
+		tmp.cmax=tree[id].cmax;
+		tmp.cmin=tree[id].cmin;
+		return tmp;
+	}
+	if(beg==end){	//one point
+		tmp.cmax=tree[id].cmax;
+		tmp.cmin=tree[id].cmin;
+		return tmp;
+	}
+	int  mid=(beg+end)/2;	//some is out,some is in
+	node2 lf,rf;
+	lf=findans(2*id,beg,mid,ita,itb);
+	rf=findans(2*id+1,mid+1,end,ita,itb);
+	tmp.cmax=max(lf.cmax,rf.cmax);
+	tmp.cmin=min(lf.cmin,rf.cmin);
+	return tmp;
+}
+///////binary index tree////////////////
+int lowbit(int in){
+	return in&(-in);
+}
+int getsum(int end){
+	int tmp=0;
+	while(end){
+		tmp+=s[end];
+		end -= lowbit(end);
+	}
+	return tmp;
+}
+void change(int end,int delta){
+	for(int i=end;i<=maxx;i+=lowbit(i))
+		s[i]+=delta;
+}
+////2 dimetion
+void change(int x,int y,int delta){
+	for(int i=x;i<maxx;i+=lowbit(i))
+		for(int j=y;j<maxx;j+=lowbit(j))
+			tree[i][j]+=delta;
+}
+int getsum(int x,int y){
+	int sum=0;
+	for(int i=x;i>0;i-=lowbit(i))
+		for(int j=y;j>0;j-=lowbit(j))
+			sum+=tree[i][j];
+	return sum;
+}
+sum=0;
+l++,b++,r++,t++;//l<x<r,b<y<t,l r is column,b t is row
+sum=getsum(r,t)-getsum(l-1,t)-getsum(r,b-1)+
+getsum(l-1,b-1);
+printf("%d\n",sum);

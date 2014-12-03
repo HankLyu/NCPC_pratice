@@ -1,0 +1,70 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<vector>
+
+using namespace std;
+
+struct node
+{
+	bool isword;
+	int next[10];
+}tmp;
+int root=1,NW;
+bool ans;
+vector<node>trie;
+
+void insert(char s[])
+{
+	int len,ptr=0;
+	len=strlen(s);
+	//printf("len=%d\n",len);
+	for(int i=0;i<len;i++){
+		int j=1;
+        j=s[i]-'0';
+		//printf("%s ",s);
+		if(trie[ptr].next[j]==0){
+			memset(&tmp,0,sizeof(tmp));
+			tmp.next[j]=++NW;
+			trie.push_back(tmp);
+		}
+		ptr=trie[ptr].next[j];
+		if(trie[ptr].isword==true)	ans=1;
+	}
+	trie[ptr].isword=true;
+	for(int i=0;i<10;i++){
+		if(trie[ptr].next[i]){
+			ans=true;
+			break;
+		}
+	}
+}
+int main()
+{
+	int test,n;
+	char s[100];
+	scanf("%d",&test);
+	while(test--){
+		NW=0;
+		ans=0;
+		trie.clear();
+		scanf("%d",&n);
+		memset(&tmp,0,sizeof(tmp));
+		trie.push_back(tmp);
+		for(int i=0;i<n;i++){
+			scanf("%s",s);
+			insert(s);
+		}
+		for(int i=0;i<10;i++){
+			printf("%d: ",i);
+			for(int j=0;j<trie.size();j++)
+				printf("%d ",trie[j].next[i]);
+			printf("\n");
+		}
+		if(ans)	printf("NO\n");
+		else	printf("YES\n");
+	}
+	trie.clear();
+	return 0;
+}
+

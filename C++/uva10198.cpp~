@@ -1,0 +1,55 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+
+#define maxx 1005
+#define base 10000
+
+using namespace std;
+
+struct node
+{
+	int num[maxx];
+};
+
+void print_big(node n)
+{
+	int i=1000;
+	while(n.num[i]==0 &&i>=0)	i--;
+	printf("%d",n.num[i]);
+	i--;
+	for(;i>=0;i--)
+		printf("%04d",n.num[i]);
+	printf("\n");
+}
+node add(node b,node c)
+{
+	node a;
+	memset(&a,0,sizeof(a));
+	int sum;
+	for(int i=0;i<maxx;i++){
+		sum=b.num[i]+c.num[i];
+		a.num[i]+=sum%base;
+		a.num[i+1]+=sum/base;
+	}
+	//a.num[0]+=b.num[0]+c.num[0];
+	return a;
+}
+int main()
+{
+	node dp[maxx];
+	memset(dp,0,sizeof(dp));
+	dp[0].num[0]=1;
+	dp[1].num[0]=2;
+	dp[2].num[0]=5;
+	for(int i=3;i<=1000;i++){
+		dp[i]=add(dp[i-1],dp[i-1]);
+		dp[i]=add(dp[i],dp[i-3]);
+		dp[i]=add(dp[i],dp[i-2]);
+	}
+	int n;
+	while(scanf("%d",&n)!=EOF){
+		print_big(dp[n]);
+	}
+	return 0;
+}

@@ -1,0 +1,43 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+
+#define eps 1e-9
+
+using namespace std;
+
+struct point{
+	double x,y;
+}a,p[4];
+
+int r;
+double dis(point a,point b){
+	return pow(a.x-b.x,2)+pow(a.y-b.y,2);
+}
+
+bool check(){
+	for(int i=0;i<4;i++){
+		//printf("i=%d dis=%lf\n",i,dis(a,p[i]));
+		if(fabs((double)r*(double)r-dis(a,p[i]))<eps)	return false;
+	}
+	return true;
+}
+int main(){
+	int n;
+	while(scanf("%d %d",&n,&r) && n){
+		int in=0.0;
+		p[0].x=0.0,p[0].y=0.0;
+		p[1].x=r,p[1].y=0.0;
+		p[2].y=r,p[2].x=0.0;;
+		p[3].x=p[3].y=r;
+		for(int i=0;i<n;i++){
+			scanf("%lf %lf",&a.x,&a.y);
+			if(check())	in++;
+		}
+		//printf("in=%d\n",in);
+		printf("%.5lf\n",(double)in*(double)r*(double)r/(double)n);
+	}
+	return 0;
+}

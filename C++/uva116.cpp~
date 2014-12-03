@@ -1,0 +1,72 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+
+#define inf 1 
+using namespace std;
+
+int len[11],m,n;
+int path[11][110],ar[11][110],dp[11][110];
+bool use[11][110];
+
+int lcs(int n1,int n2)
+{
+	if(n2==0){
+		use[n1][n2]=true;
+		dp[n1][n2]=ar[n1][n2];
+		printf("%d\n",ar[n1][n2+1]);
+		printf("n1=%d n2=%d dp=%d\n",n1,n2,dp[n1][n2]);
+		return dp[n1][n2];
+	}
+	if(use[n1][n2]==true)
+		return dp[n1][n2];
+	int a,b,c;
+	if(n1>0)	a=n1-1;
+	else	a=m-1;
+	b=n1;
+	if(n1<m-1)	c=n1+1;
+	else	c=0;
+	int t1=lcs(a,n2-1),t2=lcs(b,n2-1),t3=lcs(c,n2-1);
+	dp[n1][n2]=t2;
+	path[n1][n2]=1;
+	if(t1<dp[n1][n2]){
+		dp[n1][n2]=t1,path[n1][n2]=2;
+	}
+	if(t3<dp[n1][n2]){
+		dp[n1][n2]=t3,path[n1][n2]=3;
+	}
+	use[n1][n2]=1;
+	return dp[n1][n2];
+}
+int main()
+{
+	while(scanf("%d %d",&m,&n)!=EOF){
+		int ar[m][n],ans=0;
+		memset(path,0,sizeof(path));
+		memset(dp,0,sizeof(dp));
+		memset(use,0,sizeof(use));
+		for(int i=0;i<m;i++)
+			for(int j=0;j<n;j++)
+				scanf("%d",&ar[i][j]);
+				
+		for(int i=0;i<m;i++)
+			len[i]=lcs(i,n-1);
+		
+		printf("dp:\n");
+		for(int i=0;i<m;i++){
+			for(int j=0;j<n;j++)
+				printf("%d ",dp[i][j]);
+			printf("\n");
+		}
+		printf("path\n");
+		for(int i=0;i<m;i++){
+			for(int j=0;j<n;j++)
+				printf("%d ",path[i][j]);
+			printf("\n");
+		}
+		printf("\n");
+		
+		//find_lcs(m-1,n-1);
+	}
+	return 0;
+}

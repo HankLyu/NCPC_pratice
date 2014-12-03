@@ -1,0 +1,50 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<map>
+#include<cmath>
+#include<vector>
+
+#define maxx 16000005
+
+using namespace std;
+
+int n,nc;
+int dp[maxx];
+char s[maxx];
+
+int pow(int n,int b){
+	int ans=1;
+	for(int i=0;i<b;i++)
+		ans*=n;
+	return ans;
+}
+int main()
+{
+	int p,q;
+	while(scanf("%d %d",&n,&nc)!=EOF){
+		memset(dp,0,sizeof(dp));
+		scanf("%s",s);
+		p=nc;
+		int slen=strlen(s);
+		int tmp=0,ans=0,k;
+		//printf("%d %d\n",p,q);
+		for(int i=0;i<n;i++)
+			tmp=(tmp*p+s[i]-'a');
+		dp[tmp]++;
+		//printf("%d\n",tmp);
+		ans++;
+		for(int i=n;i<slen;i++){
+			k = pow(p,n-1)*(s[i-n]-'a');
+			tmp-=k;
+			tmp*=p;
+			tmp += s[i]-'a';
+			if(!dp[tmp]){
+				dp[tmp]++;
+				ans++;
+			}
+		}
+		printf("%d\n",ans);
+	}
+	return 0;
+}

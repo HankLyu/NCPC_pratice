@@ -1,0 +1,50 @@
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+
+#define maxx 110
+
+using namespace std;
+
+struct Point{
+	double x,y;
+};
+
+int main()
+{
+	int test,num;
+	scanf("%d",&test);
+	while(test--){
+		Point p[maxx];
+		int visit[maxx]={0};
+		double x,y,w[maxx][maxx],d[maxx],ans=0;
+		scanf("%d",&num);
+		for(int i=0;i<num;i++)
+			d[i]=2e9;
+		d[0]=0;
+		for(int i=0;i<num;i++)
+			scanf("%lf %lf",&p[i].x,&p[i].y);
+		for(int i=0;i<num;i++)
+			for(int j=0;j<num;j++)
+				w[i][j]=sqrt( pow(p[i].x-p[j].x,2)+ pow(p[i].y-p[j].y,2));
+		for(int i=0;i<num;i++){
+			int a=-1,b=-1,min=2e9;
+			for(int j=0;j<num;j++)
+				if(!visit[j] && d[j]<min){
+					a=j;
+					min=d[j];
+				}
+				if(a==-1)	break;
+				visit[a]=1;
+				for(b=0;b<num;b++)
+					if(!visit[b] && w[a][b]<d[b])
+						d[b]=w[a][b];
+		}
+		for(int i=0;i<num;i++)
+			ans += d[i];
+		printf("%.2lf\n",ans);
+		if(test)	printf("\n");
+	}//while
+	return 0;
+}

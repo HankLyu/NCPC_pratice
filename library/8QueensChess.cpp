@@ -1,0 +1,25 @@
+bool my[10],md1[15],md2[15];
+int solution[10],so;
+
+void backtrack(int x){
+	if(x==8){
+		if(solution[sety-1]==setx){
+			//printf("x=%d y=%d s[x]=%d\n",setx,sety,solution[setx]);
+			printf("%2d     ",so);
+			so++;
+			for(int i=0;i<8;i++)
+				printf(" %d",solution[i]);
+			printf("\n");
+		}
+		return ;
+	}
+	for(int y=0;y<8;y++){
+		int d1=(x+y)%15,d2=(x-y+15)%15;
+		if(!my[y] && !md1[d1] && !md2[d2]){
+			my[y]=md1[d1]=md2[d2]=true;
+			solution[x]=y+1;
+			backtrack(x+1);
+			my[y]=md1[d1]=md2[d2]=false;
+		}//if
+	}//for
+}

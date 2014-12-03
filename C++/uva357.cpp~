@@ -1,0 +1,27 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+
+#define inf 200000000
+#define max 30100
+
+using namespace std;
+int v[5]={1,5,10,25,50};
+int num;
+unsigned long long int dp[max]={1};
+
+int main()
+{
+	int cent;
+	dp[0]=1;
+	for(int i=0;i<5;i++)
+		for(int j=v[i];j<max;j++)
+			dp[j] += dp[j-v[i]];
+	while(scanf("%d",&cent)!=EOF){
+		if(dp[cent]>1)
+			printf("There are %llu ways to produce %d	cents change.\n",dp[cent],cent);
+		else
+			printf("There is only 1 way to produce %d cents change.\n",cent);
+	}
+	return 0;
+}

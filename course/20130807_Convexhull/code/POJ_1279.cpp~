@@ -1,0 +1,114 @@
+//此題為順時針
+#include <iostream>
+#include<cmath>
+#define MAXN 3000    //點最大為1500時
+#define eps 1e-7
+struct Point
+{
+    double x,y;
+};
+struct Center
+{
+    int n;           //點的數量
+    Point p[MAXN];
+}tem;
+struct Line
+{
+    double a,b,c;
+};
+double cross(Point p0,Point p1,Point p2)
+{
+    return (p1.x-p0.x)*(p2.y-p0.y)-(p1.y-p0.y)*(p2.x-p0.x);
+}
+void getl(Point p1,Point p2,Line &l)        //得到線段的係數
+{
+    l.a=p1.y-p2.y;
+    l.b=p2.x-p1.x;
+    l.c=(p1.x-p2.x)*p1.y-(p1.y-p2.y)*p1.x;
+}
+void getp(Line l1,Line l2,Point &pot)   //得到交點
+{
+    double bse;
+    bse=l1.a*l2.b-l1.b*l2.a+eps;
+    pot.x=(l2.c*l1.b-l2.b*l1.c)/bse;  //x
+    pot.y=(l1.c*l2.a-l1.a*l2.c)/bse;   //y
+}
+int equal(Point p1,Point p2)      //判斷相等時精準度
+{
+    return fabs(p1.x-p2.x)<eps&&fabs(p1.y-p2.y)<eps;
+}
+void cut(Point p1,Point p2)
+{
+    int i,c=0,j;
+    double css1,css2;
+    Center newret;
+    Point pot,pre;
+    Line l1,l2;
+    for (i=0;i<tem.n;i++)
+    {
+        css1=cross(p1,p2,tem.p[i]);
+        css2=cross(p1,p2,tem.p[i+1]);
+        if (css1>0.0||css2>0.0)    //當有點 在逆時針方向
+        {
+            if (css1*css2<0)    //一點在順  一點在逆時
+            {
+                getl(p1,p2,l1);    //得到l1的係數
+                getl(tem.p[i],tem.p[i+1],l2);   //得到l2的係數
+                getp(l1,l2,pot);   //得到交點
+                if (css1<0.0)      //當 p[i]在順時針方向時   newret.p 要照順序
+                {
+                    newret.p[c++]=tem.p[i];
+                    newret.p[c++]=pot;
+                }
+                else
+                {
+                    newret.p[c++]=pot;
+                    newret.p[c++]=tem.p[i+1];
+                }
+            }
+        }
+        else
+        {
+            newret.p[c++]=tem.p[i];
+            newret.p[c++]=tem.p[i+1];
+        }
+    }
+    j=1;
+    tem.p[0]=pre=newret.p[0];
+    for (i=1;i<c;i++)      //把相等的點排除
+    {
+        if(!equal(newret.p[i-1],newret.p[i]))
+            tem.p[j++]=newret.p[i];
+    }
+    if(equal(tem.p[j-1],tem.p[0]))   //考慮頭尾
+        j--;
+    tem.p[j]=tem.p[0];
+    tem.n=j;
+}
+double area(Center tem)   //計算面積
+{
+    double S=0;
+    for (int i=0;i<tem.n;i++)
+        S+=tem.p[i].x*tem.p[i+1].y-tem.p[i].y*tem.p[i+1].x;
+    return fabs(S/2);
+}
+int main()
+{
+    int T,N,i;
+    Center ret;    //輸入的測資
+    scanf("%d",&T);
+    while (T--)
+    {
+        scanf("%d",&N);
+        for (i=0;i<N;i++)
+            scanf("%lf%lf",&ret.p[i].x,&ret.p[i].y);
+        ret.n=N;
+        ret.p[N]=ret.p[0];
+        tem=ret;
+        for (i=0;i<N;i++)
+            cut(ret.p[i],ret.p[i+1]);
+        printf("%.2lf\n",area(tem));
+    }
+    return 0;
+}
+

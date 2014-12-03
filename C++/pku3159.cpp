@@ -1,0 +1,76 @@
+#include<iostream>
+#include<cstring>
+#include<cstdio>
+#include<queue>
+#include<vector>
+#include<stack>
+
+#define INF 100000000
+#define maxn 30003
+#define maxe 150005
+
+using namespace std;
+
+struct Edge
+{
+	int t,w;
+}tmp;
+vector<Edge>edge[maxn];
+int dis[maxn],n,m;
+bool vis[maxn];
+
+bool SPFA(int start)
+{
+	stack<int>v;
+	int count[maxn],now,next;
+	bool inqueue[maxn];
+
+	memset(count,0,sizeof(count));
+	memset(inqueue,0,sizeof(inqueue));
+	for(int i=0;i<maxn;i++)
+		dis[i]=INF;
+	v.push(start);
+	count[start]++;
+	dis[start]=0;
+
+	while(!v.empty()){
+		now=v.top();
+		v.pop();
+		inqueue[now]=false;
+		for(int i=0;i<(int)edge[now].size();i++){
+			next=edge[now][i].t;
+			if(dis[now]+edge[now][i].w<dis[next]){
+				dis[next]=dis[now]+edge[now][i].w;
+				if(!inqueue[next]){
+					v.push(next);
+					inqueue[next]=true;
+					count[next]++;
+				}
+				if(count[next]>=n)	return true;
+			}
+		}
+	}
+	return false;
+}
+int main()
+{
+	int a,b,w;
+	while(scanf("%d %d",&n,&m) != EOF){
+		for(int i=0;i<maxn;i++)
+			edge[i].clear();
+		for(int i=0;i<n;i++){
+			scanf("%d %d %d",&a,&b,&w);
+			tmp.t=b,tmp.w=w;
+			edge[a].push_back(tmp);
+		}
+		SPFA(1);
+		int ans=0;
+		/*for(int i=1;i<=n;i++){
+			//printf("dis[%d]= %d\n",i,dis[i]);
+			if(dis[i] != INF)
+			ans=max(ans,dis[i]);
+		}*/
+		printf("%d\n",dis[n]);
+	}
+	return 0;
+}

@@ -1,0 +1,4 @@
+#include <iostream>
+#define MAXN 505
+using namespace std;
+int w[MAXN][MAXN];// 

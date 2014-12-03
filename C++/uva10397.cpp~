@@ -1,0 +1,63 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+
+#define INF 1000000000.000
+#define maxx 800
+
+using namespace std;
+
+struct building
+{
+	int x,y;
+};
+
+double dis(building i,building j)
+{
+	return sqrt((i.x-j.x)*(i.x-j.x)
+		+(i.y-j.y)*(i.y-j.y));
+}
+
+int main()
+{
+	int n,m,cov[maxx];
+	double w[maxx][maxx],lowcost[maxx],ans;
+	int hasa,hasb;
+	building b[maxx];
+	while(scanf("%d",&n) != EOF){
+		for(int i=1;i<=n;i++)
+			scanf("%d %d",&b[i].x,&b[i].y);
+		for(int i=1;i<=n;i++)	w[i][i]=INF;
+		for(int i=1;i<=n;i++)
+			for(int j=i+1;j<=n;j++)
+				w[i][j]=w[j][i]=dis(b[i],b[j]);
+		scanf("%d",&m);
+		for(int i=1;i<=m;i++){
+			scanf("%d %d",&hasa,&hasb);
+			w[hasa][hasb]=w[hasb][hasa]=0;
+		}
+		ans=0;
+		for(int i=1;i<=n;i++){
+			lowcost[i]=w[1][i];
+			cov[i]=0;
+		}
+		cov[1]=1;	lowcost[1]=0;
+		for(int i=1;i<=n;i++){
+			double min=INF;
+			int u=1;
+			for(int j=1;j<=n;j++)
+				if(!cov[j] && lowcost[j]<min){
+					min=lowcost[j];
+					u=j;
+				}
+			cov[u]=1;
+			ans +=lowcost[u];
+			for(int j=1;j<=n;j++)
+				if(!cov[j] && w[u][j] < lowcost[j])
+					lowcost[j]=w[u][j];
+		}
+		printf("%.2lf\n",ans);
+	}
+	return 0;
+}

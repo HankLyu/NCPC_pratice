@@ -1,0 +1,18 @@
+void getline(int num[])
+{
+	int i,j,k,numcount=0,len;
+	char str[100000];
+	fgets(str,sizeof(str),stdin);
+	for(i=0;i<strlen(str);i++){
+		if(str[i]==' '){
+			num[numcount]=atoi(str);
+			numcount++;
+			for(j=i;j<strlen(str);j++){
+				k=i+1;
+				str[j+1-k]=str[j+1];
+			}
+			i=0;
+		}
+	}
+	num[numcount]=atoi(str);
+}

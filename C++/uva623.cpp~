@@ -1,0 +1,39 @@
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+
+#define maxx 1005
+
+using namespace std;
+
+int ans[maxx][300];
+
+int main()
+{
+	int last=0,n,i,j;
+	ans[0][0]=1;
+	for(i=1;i<=1000;i++){
+		for(j=0;j<=last;j++)
+			ans[i][j]=ans[i-1][j]*i;
+		for(j=0;j<=last;j++){
+			ans[i][j+1] += ans[i][j]/10;
+			ans[i][j] %= 10;
+		}
+		while(ans[i][j]!=0){
+			ans[i][j+1] += ans[i][j]/10;
+			ans[i][j] %= 10;
+			j++;
+		}
+		last=j;
+	}
+	while(scanf("%d",&n) !=EOF){
+		i=2999;
+		printf("%d!\n",n);
+		while(ans[n][i]==0)	i--;
+		for(;i>=0;i--)
+			printf("%d",ans[n][i]);
+		printf("\n");
+	}
+	return 0;
+}

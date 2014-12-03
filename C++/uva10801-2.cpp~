@@ -1,0 +1,163 @@
+/*#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<cstdlib>
+//#include<utility>
+
+#define maxx 105
+#define INF 1000000000
+
+using namespace std;
+
+int n,k,t[6],w[maxx][maxx],arr[maxx],dis[maxx];
+bool inqueue[maxx];
+
+void SPFA(int start)
+{
+	memset(inqueue,false,sizeof(inqueue));
+	for(int i=0;i<n;i++)	dis[i]=INF;
+	dis[start]=0;
+	queue<int>q;
+	inqueue[start]=true;
+	q.push(start);
+	while(!q.empty()){
+		int u=q.front();
+		q.pop();
+		inqueue[u]=false;
+		for(int i=0;i<n;i++){
+			if(u==0){
+				if(dis[i]>dis[u]+w[u][i]){
+					dis[i]=dis[u]+w[u][i];
+					if(inqueue[i]==false){
+						inqueue[i]=true;
+						q.push(i);
+					}
+				}
+			}
+			else if(dis[i]>dis[u]+w[u][i]+60){
+				dis[i]=dis[u]+w[u][i]+60;
+				if(inqueue[i]==false){
+					inqueue[i]=true;
+					q.push(i);
+				}
+			}
+		}//for(int i=0;i<n;i++)
+	}//while(!q.empty())
+}
+int main()
+{
+	char input[1000],*p;
+	while(scanf("%d %d",&n,&k)!= EOF){
+		for(int i=0;i<n;i++){
+			w[i][i]=INF;
+			for(int j=i+1;j<n;j++)
+				w[i][j]=w[j][i]=INF;
+		}
+		for(int i=0;i<n;i++)
+			scanf("%d",&t[i]);
+		getchar();
+		for(int i=0;i<n;i++){
+			gets(input);
+			int pos=0;
+			for(p=strtok(input," ");p!=NULL;p=strtok(NULL," "))
+				arr[pos++]=atoi(p);
+
+			for(int j=0;j<pos;j++)
+				for(int k=j;k<pos;k++){
+					int tmp=abs(arr[j]-arr[k])*t[i];
+					if(tmp<w[arr[j]][arr[k]])
+						w[arr[j]][arr[k]]=w[arr[k]][arr[j]]=tmp;
+				}
+		}
+		SPFA(0);
+		if(dis[k] != INF)	printf("%d\n",dis[k]);
+		else printf("IMPOSSIBLE\n");
+	}
+	return 0;
+}*/
+/*
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<cstdlib>
+#include<queue>
+//#include<utility>
+using namespace std;
+
+//typedef pair<int,int>pii;
+//priority_queue<pii,vector<pii>,greater<pii> >q;
+
+const int N   = 105;
+const int INF = 1000000000;
+int n, k, T[6], w[N][N], arr[N], d[N];
+bool vis[N];
+
+void SPFA(int src){
+    memset(vis, 0, sizeof(vis));
+    for(int i=0; i<N; ++i) d[i]=INF;
+    d[src] = 0;
+    queue<int>q;
+    q.push(src);
+    while(!q.empty()){
+        int u=q.front(); q.pop();
+        vis[u] = false;
+        for(int i=0; i<N; ++i){
+            if(u==0){
+                if(d[i]>d[u]+w[u][i]){
+                    d[i] = d[u]+w[u][i];
+                    if(!vis[i]){
+                        vis[i] = true;
+                        q.push(i);
+                    }
+                }
+            }
+            else if(d[i]>d[u]+w[u][i]+60){
+                d[i] = d[u]+w[u][i]+60;
+                if(!vis[i]){
+                    vis[i] = true;
+                    q.push(i);
+                }
+            }
+        }
+    }
+}
+
+int main(){
+	char input[1000],*p;
+    while(~scanf("%d%d",&n,&k)){
+        for(int i=0; i<N; ++i){
+        w[i][i] = INF;
+        for(int j=i+1; j<N; ++j)
+            w[i][j]=w[j][i]=INF;
+    	}
+		for(int i=0; i<n; ++i)
+		    scanf("%d",&T[i]);
+		getchar();
+		char ch;
+		for(int i=0; i<n; ++i){
+		    int pos=0;
+		    /*do{
+		        scanf("%d",&arr[pos++]);
+		    }while(getchar()!='\n');
+			
+			gets(input);
+			for(p=strtok(input," ");p!=NULL;p=strtok(NULL," "))
+				arr[pos++]=atoi(p);
+
+		    for(int j=0; j<pos; ++j){
+		        for(int k=j; k<pos; ++k){
+		            int tmp=abs(arr[j]-arr[k])*T[i];
+		            if(tmp<w[arr[j]][arr[k]]){
+		                w[arr[j]][arr[k]] = w[arr[k]][arr[j]] = tmp;
+		            }
+		        }
+		    }
+		}
+         SPFA(0);
+        if(d[k]!=INF) printf("%d\n", d[k]);
+        else printf("IMPOSSIBLE\n");
+    }
+    return 0;
+}*/

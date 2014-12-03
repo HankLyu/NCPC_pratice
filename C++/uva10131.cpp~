@@ -1,0 +1,77 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+
+#define maxx 1005
+
+using namespace std;
+
+int dp[maxx],prev[maxx],tag;
+struct ele
+{
+	int n,weight,iq;
+}num[maxx];
+
+bool cmp (ele a, ele b)
+{
+        if(a.weight < b.weight) return true;
+        else if(a.weight == b.weight){
+                return a.iq > b.iq;
+        }
+        else return false;
+}
+
+void print_LIS(int x)
+{
+	if(prev[x] != -1)
+		print_LIS(prev[x]);
+	//printf("x=%d ans=%d w=%d iq=%d\n",x,num[x].n,num[x].weight,num[x].iq);
+	printf("%d\n",num[x].n);
+}
+void LIS()
+{
+	int set;
+	memset(prev,-1,sizeof(prev));
+	for(int i=0;i<tag;i++) dp[i]=1;
+	for(int i=0;i<tag;i++){
+		for(int j=0;j<i;j++)
+			if(num[j].iq > num[i].iq &&
+					num[j].weight<num[i].weight && dp[j]+1 >dp[i]){
+				dp[i]=dp[j]+1;
+				prev[i]=j;
+				set=i;
+			}
+	}
+	int ans=0;
+	for(int i=0;i<tag;i++)
+		ans=max(ans,dp[i]);
+	printf("%d\n",ans);
+	/*
+	printf("set=%d\n",set);
+	for(int i=0;i<tag;i++)
+		printf("%d ",dp[i]);
+		cout<<endl;
+	for(int i=0;i<tag;i++)
+		printf("%d ",prev[i]);
+		cout<<endl;
+	*/
+	print_LIS(set);
+}
+int main()
+{
+	int a,b;
+	tag=0;
+	while(scanf("%d %d",&a,&b) != EOF){
+		num[tag].n=tag+1;
+		num[tag].weight=a;
+		num[tag].iq=b;
+		tag++;
+	}
+	sort(num,num+tag,cmp);
+	LIS();
+	/*for(int i=0;i<tag;i++){
+		printf("%d %d\n",num[i].weight,num[i].iq);
+	}*/
+	return 0;
+}

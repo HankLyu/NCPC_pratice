@@ -1,0 +1,11 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<vector>
+#include<iostream>
+#include<algorithm>
+#define MAX 100000
+using namespace std ;
+int  num[ MAX ] , n ;
+int  lis[ MAX ] ;
+int prev[ MAX ] ;	                // prev[x] 

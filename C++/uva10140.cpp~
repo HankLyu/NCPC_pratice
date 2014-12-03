@@ -1,0 +1,76 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<vector>
+
+#define maxx 46341
+
+using namespace std;
+
+bool p[maxx];
+vector<int> prime;
+int l,u,len;
+int a,b,c,d;
+void sieve()
+{
+	memset(p,true,sizeof(p));
+	p[0]=0;
+	p[1]=0;
+	for(int i=2;i<=sqrt(maxx);i++)
+		if(p[i]){
+			prime.push_back(i);
+			for(int j=i*i;j<maxx;j+=i)
+				p[j]=0;
+		}
+}
+bool isprime(int n){
+	for(int i=0;i<len && prime[i]<=n;i++)
+		if(n%prime[i]==0)	return false;
+	return true;
+}
+void check(int i,primea,primeb)
+{
+	if(a-b !=0){
+		if(primeb-primea< b-a){
+			a=primea;
+			b=primeb;
+		}
+	}
+	else{
+		a=primea;
+		b=primeb;
+	}
+	if(d-c !=0){
+		if(primeb-primea>d-c){
+			c=primea;
+			d=primeb;
+		}
+	}
+	else{
+		c=primea;
+		d=primeb;
+	}
+}
+int main()
+{
+	sieve();
+	len=prime.size();
+	while(scanf("%d %d",&l,&u)!=EOF){
+		a=0,b=0,c=0,d=0;
+		for(int i=1;prime[i]<=u;i++)
+			if(prime[i-1]>=l){
+				check(i,prime[i-1],prime[i]);
+			}
+		if(u>=maxx){
+			int tmpa=prime[len-1];
+			for(int i=maxx;i<=u;i++)
+				if(isprime(i)){
+				}
+		}
+		if(a!=0)
+			printf("%d,%d are closest, %d,%d are most distant.\n",a,b,c,d);
+		else	printf("There are no adjacent primes.\n");
+	}
+	return 0;
+}

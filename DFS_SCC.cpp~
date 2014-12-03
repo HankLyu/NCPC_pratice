@@ -1,0 +1,31 @@
+int w[maxx][maxx],inver[maxx][maxx];
+int visit[maxx],invis[maxx];
+int cycle[maxx],n,m,depth,ans;
+
+void DFS(int now)
+{
+	visit[now]=true;
+	for(int i=1;i<=n;i++){
+		if(w[now][i]>0 && !visit[i]){
+			DFS(i);
+		}
+	}
+	cycle[depth++]=now;
+}
+void INDFS(int now)
+{
+	invis[now]=true;
+	for(int i=1;i<=n;i++)
+		if(w[i][now]>0 && !invis[i])
+			INDFS(i);
+}
+for(int i=1;i<=n;i++)
+	if(visit[i]==0)
+		DFS(i);
+for(int i=depth-1;i>=0;i--){
+	if(invis[ cycle[i] ]==0){
+		ans++;
+		INDFS( cycle[i] );
+	}
+}
+printf("%d\n",ans);
